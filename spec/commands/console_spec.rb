@@ -7,11 +7,28 @@ describe "bundle console" do
       gem "rack"
       gem "activesupport", :group => :test
       gem "rack_middleware", :group => :development
+      gem "ripl", :group => :development
     G
   end
 
+  # it "starts the configured interactive shell with the default group loaded" do
+  #   begin
+  #     bundle "config console pry"
+  #     bundle "console" do |input|
+  #       input.puts("Object.const_get('Pry')")
+  #       input.puts("puts RACK")
+  #       input.puts("exit")
+  #     end
+  #     expect(out).to include("0.9.1")
+  #   ensure
+  #     puts "deleting"
+  #     bundle "config --delete console"
+  #   end
+  # end
+
   it "starts IRB with the default group loaded" do
     bundle "console" do |input|
+      input.puts("Object.const_get('Pry')")
       input.puts("puts RACK")
       input.puts("exit")
     end

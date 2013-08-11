@@ -638,10 +638,18 @@ module Bundler
     desc "console [GROUP]", "Opens an IRB session with the bundle pre-loaded"
     def console(group = nil)
       group ? Bundler.require(:default, *(group.split.map! {|g| g.to_sym })) : Bundler.require
+      interactive_shell = Bundler.settings[:console]
       ARGV.clear
 
-      require 'irb'
-      IRB.start
+      if interactive_shell && interactive_shell.downcase != 'irb'
+        require interactive_shell
+        Object.const_get(interactive_shell.capitalize).start
+      else
+        require 'irb'
+        IRB.start
+      end
+    rescue LoadError, NameError
+      Bundler.ui.error "Could not load the #{interactive_shell} console"
     end
 
     desc "version", "Prints the bundler's version information"
